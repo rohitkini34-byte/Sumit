@@ -110,6 +110,8 @@ html:lang(hi) .hero-name, html:lang(mr) .hero-name { line-height: 1.15; letter-s
   filter: drop-shadow(0 16px 24px rgba(3, 8, 22, .5));
 }
 .seal svg { width: 100%; height: 100%; overflow: visible; }
+.seal-logo { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 0 1px rgba(212, 162, 76, .6), 0 0 0 5px var(--navy), 0 0 0 6px rgba(212, 162, 76, .5); }
+.has-council-logo .seal-drawn { display: none; }
 .seal-bg { fill: var(--navy); stroke: var(--brass-lit); stroke-width: 1; }
 .seal-ring { fill: none; stroke: var(--brass-lit); stroke-width: .6; opacity: .7; }
 .seal-ring--red { stroke: #C4454A; opacity: .9; stroke-width: .8; }

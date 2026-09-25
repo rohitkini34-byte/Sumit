@@ -1,9 +1,7 @@
-/* All animation lives here, plus the reduced-motion overrides. */
+/* CSS-side motion: keyframes, initial states and reduced-motion overrides.
+   Spring/orchestrated motion is driven by the Motion library (see src/*.js). */
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-@keyframes photo-in { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
-@keyframes seal-pop { 0% { opacity: 0; transform: translateZ(60px) scale(.8); } 70% { opacity: 1; transform: translateZ(60px) scale(1.04); } 100% { opacity: 1; transform: translateZ(60px) scale(1); } }
 @keyframes float { 0%, 100% { transform: translateY(-6px); } 50% { transform: translateY(6px); } }
 
 /* ---------- Hero intro (plays once, after the gate opens) ---------- */
@@ -14,12 +12,7 @@
 .hero[data-intro="pending"] .seal { opacity: 0; }
 .hero[data-intro="pending"] .arch-line path { stroke-dasharray: 1; stroke-dashoffset: 1; }
 
-.hero[data-intro="play"] .arch-line path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .6s var(--ease-out) forwards; }
-.hero[data-intro="play"] .arch-photo { animation: photo-in .7s var(--ease-out) .2s both; }
-.hero[data-intro="play"] .intro-fade { animation: fade-in .5s var(--ease-out) .25s both; }
-.hero[data-intro="play"] .hero-name .word { animation: rise .6s var(--ease-out) calc(300ms + var(--i, 0) * 80ms) both; }
-.hero[data-intro="play"] .intro-late { animation: fade-in .4s var(--ease-out) .7s both; }
-.hero[data-intro="play"] .seal { animation: seal-pop .5s var(--ease-out) .9s both; }
+/* The "play" phase itself is driven by Motion in src/hero.js. */
 
 /* Touch devices: slow idle float instead of tilt */
 @media (hover: none) {
@@ -55,7 +48,7 @@
   .chart .chart-pt { opacity: 1 !important; }
   .chart .chart-area { opacity: .1 !important; }
   /* Sanad: crossfade instead of rotating */
-  .sanad-inner, .sanad[aria-pressed="true"] .sanad-inner { transform: none; }
+  .sanad-inner, .sanad[aria-pressed="true"] .sanad-inner { transform: none !important; }
   .sanad-back { transform: none; opacity: 0; }
   .sanad[aria-pressed="true"] .sanad-front { opacity: 0; }
   .sanad[aria-pressed="true"] .sanad-back { opacity: 1; }

@@ -88,9 +88,8 @@ html:lang(hi) .pull-quote p, html:lang(mr) .pull-quote p { font-style: normal; l
 .sanad-inner {
   position: relative; display: block; width: 100%; aspect-ratio: 1.45 / 1;
   transform-style: preserve-3d;
-  transition: transform .7s var(--ease-out);
 }
-.sanad[aria-pressed="true"] .sanad-inner { transform: rotateY(180deg); }
+/* The flip is a Motion spring on .sanad-inner (src/sanad-card.js). */
 .sanad-face {
   position: absolute; inset: 0; overflow: hidden;
   display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
@@ -110,11 +109,13 @@ html:lang(hi) .pull-quote p, html:lang(mr) .pull-quote p { font-style: normal; l
   content: ""; position: absolute; inset: 4px; border: 1px solid color-mix(in srgb, var(--seal) 20%, transparent);
 }
 .sanad-front > span:not(.sanad-border) { position: relative; }
+.sanad-logo { position: relative; width: clamp(44px, 12%, 64px); height: auto; aspect-ratio: 1; margin-bottom: 10px; border-radius: 50%; }
 .sanad-council {
   font-family: var(--font-black); color: var(--seal);
   font-size: clamp(1.15rem, 3.6vw, 1.75rem); line-height: 1.2; max-width: 22ch;
 }
-html:lang(hi) .sanad-council, html:lang(mr) .sanad-council { font-weight: 400; }
+html:lang(hi) .sanad-council, html:lang(mr) .sanad-logo { position: relative; width: clamp(44px, 12%, 64px); height: auto; aspect-ratio: 1; margin-bottom: 10px; border-radius: 50%; }
+.sanad-council { font-weight: 400; }
 .sanad-cert { margin-top: 10px; font-family: var(--font-display); font-size: clamp(1rem, 2.6vw, 1.25rem); font-weight: 600; }
 .sanad-prov { font-family: var(--font-display); font-style: italic; color: var(--muted); font-size: 1rem; }
 html:lang(hi) .sanad-prov, html:lang(mr) .sanad-prov { font-style: normal; }
@@ -154,8 +155,7 @@ html:lang(hi) .sanad-prov, html:lang(mr) .sanad-prov { font-style: normal; }
 }
 .timeline-line {
   position: absolute; inset: 0; background: var(--brass);
-  transform: scaleY(0); transform-origin: top;
-  transition: transform .9s var(--ease-out);
+  transform: scaleY(0); transform-origin: top; /* drawn by Motion (src/reveal.js) */
 }
 .timeline.is-drawn .timeline-line { transform: scaleY(1); }
 .tl-list { list-style: none; margin: 0; padding: 0; }
@@ -183,16 +183,14 @@ html:lang(hi) .tl-year, html:lang(mr) .tl-year { font-style: normal; }
 .chart-svg { width: 100%; height: 260px; overflow: visible; }
 .chart-grid line { stroke: var(--rule); stroke-width: 1; }
 .chart-axis text, .chart-x text { fill: var(--muted); font-family: var(--font-body); font-size: 14px; }
-.chart-area { fill: var(--brass); opacity: .1; transition: opacity .6s ease .6s; }
+.chart-area { fill: var(--brass); opacity: .1; }
 .chart-line { fill: none; stroke: var(--brass); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
 .chart-dot { fill: var(--surface); stroke: var(--brass); stroke-width: 2; }
 .chart-val { fill: var(--ink); font-family: var(--font-body); font-size: 15px; font-weight: 600; text-anchor: middle; }
-.chart.will-draw .chart-line { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.2s var(--ease-out); }
-.chart.will-draw .chart-area { opacity: 0; }
-.chart.will-draw .chart-pt { opacity: 0; transition: opacity .3s ease; transition-delay: calc(1.1s + var(--i) * 80ms); }
-.chart.is-drawn .chart-line { stroke-dashoffset: 0; }
-.chart.is-drawn .chart-area { opacity: .1; }
-.chart.is-drawn .chart-pt { opacity: 1; }
+/* Initial state before the Motion draw (src/reveal.js); .is-drawn is the settled state. */
+.chart.will-draw:not(.is-drawn) .chart-line { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.chart.will-draw:not(.is-drawn) .chart-area,
+.chart.will-draw:not(.is-drawn) .chart-pt { opacity: 0; }
 @media (max-width: 480px) { .chart { padding: 16px 12px; } }
 
 .hl-title { margin-top: 56px; font-size: 1.375rem; }

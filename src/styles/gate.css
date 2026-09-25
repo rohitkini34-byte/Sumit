@@ -69,9 +69,7 @@ html:lang(hi) .gate-lang-label, html:lang(mr) .gate-lang-label { font-style: nor
 
 /* Opening sequence */
 .gate.is-leaving .gate-content { opacity: 0; }
-.gate.is-opening .gate-door { transition: transform .9s var(--ease-door); }
-.gate.is-opening .gate-door--left { transform: translateX(-100%); }
-.gate.is-opening .gate-door--right { transform: translateX(100%); }
+/* The door slide itself is animated with Motion in src/gate.js. */
 
 /* Re-opened from footer: plain fade in */
 .gate.is-reopened { animation: fade-in .25s ease both; }

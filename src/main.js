@@ -1,4 +1,4 @@
-import { CONTACT } from "./config.js";
+import { CONTACT, COUNCIL_LOGO } from "./config.js";
 import { initI18n } from "./i18n.js";
 import { initGate } from "./gate.js";
 import { initHero, playIntro } from "./hero.js";
@@ -13,6 +13,19 @@ function applyContact() {
   set("email-link", (el) => { el.href = `mailto:${CONTACT.email}`; });
   set("tel-link", (el) => { el.href = `tel:${CONTACT.phoneTel}`; });
   set("wa-link", (el) => { el.href = `https://wa.me/${CONTACT.whatsapp.replace(/\D/g, "")}`; });
+}
+
+// Use the Bar Council emblem wherever it is wanted, but only once it has actually loaded.
+function applyCouncilLogo() {
+  const probe = new Image();
+  probe.onload = () => {
+    document.querySelectorAll(".council-logo").forEach((img) => {
+      img.src = COUNCIL_LOGO;
+      img.hidden = false;
+    });
+    document.documentElement.classList.add("has-council-logo");
+  };
+  probe.src = COUNCIL_LOGO;
 }
 
 function initNav() {
@@ -66,6 +79,7 @@ function initNav() {
 }
 
 applyContact();
+applyCouncilLogo();
 initReveal();
 initI18n();
 initTheme();

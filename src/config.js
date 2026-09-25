@@ -10,6 +10,10 @@ export const CONTACT = {
 // Portrait shown in the hero arch (file lives in public/). BASE_URL keeps it working on sub-path hosting.
 export const PORTRAIT = `${import.meta.env.BASE_URL}portrait.jpg`;
 
+// Bar Council of Maharashtra & Goa emblem (public/bar-council-logo.png). Shown on the hero seal and
+// the Sanad card when the file exists; until then the drawn seal is used.
+export const COUNCIL_LOGO = `${import.meta.env.BASE_URL}bar-council-logo.png`;
+
 // Face-follow frames (see build plan §7). Leave frames empty until images are ready.
 export const FACE = {
   cols: 5,          // number of horizontal gaze positions

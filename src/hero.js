@@ -1,74 +1,79 @@
+import { animate, stagger, springValue, styleEffect } from "motion";
 import { FACE, PORTRAIT } from "./config.js";
 
 const mq = (q) => window.matchMedia(q);
 const reduceMotion = mq("(prefers-reduced-motion: reduce)");
 const canHover = mq("(hover: hover) and (pointer: fine)");
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-const lerp = (a, b, f) => a + (b - a) * f;
+const EASE_OUT = [0.2, 0.7, 0.2, 1];
 
+// One orchestrated intro after the gate opens. Motion drives it: tween for the line draw,
+// springs for everything that moves, so it settles naturally rather than on a fixed curve.
 export function playIntro() {
   const hero = document.querySelector(".hero");
   if (reduceMotion.matches) { hero.dataset.intro = "done"; return; }
-  hero.dataset.intro = "play";
-  // Hand back to a static state so a later language switch does not replay it.
-  window.setTimeout(() => { hero.dataset.intro = "done"; }, 2000);
+  const q = (sel) => hero.querySelectorAll(sel);
+
+  animate(q(".arch-line path"), { strokeDasharray: [1, 1], strokeDashoffset: [1, 0] }, { duration: 0.6, ease: EASE_OUT });
+  animate(q(".arch-photo"), { opacity: [0, 1], scale: [1.04, 1] }, { delay: 0.2, duration: 0.7, ease: EASE_OUT });
+  animate(q(".intro-fade"), { opacity: [0, 1] }, { delay: 0.25, duration: 0.5 });
+  // Split by word, never by letter (Devanagari conjuncts).
+  animate(q(".hero-name .word"), { opacity: [0, 1], y: [24, 0] },
+    { delay: stagger(0.08, { startDelay: 0.3 }), type: "spring", visualDuration: 0.6, bounce: 0 });
+  animate(q(".intro-late"), { opacity: [0, 1], y: [8, 0] }, { delay: 0.7, duration: 0.4, ease: EASE_OUT });
+  // z keeps the seal's translateZ(60px) layer depth while Motion owns its transform.
+  const seal = animate(q(".seal"), { opacity: [0, 1], scale: [0.8, 1], z: [60, 60] },
+    { delay: 0.9, type: "spring", visualDuration: 0.5, bounce: 0.35 });
+
+  // Hand back to a static state so a later language switch does not replay anything.
+  seal.then(() => { hero.dataset.intro = "done"; });
 }
 
-/* ---------- Tilt + lamp light + sheen ---------- */
+/* ---------- Tilt + lamp light + sheen (Motion springs) ---------- */
 function initTilt() {
   const hero = document.querySelector(".hero");
   const arch = document.getElementById("arch");
   const sheen = arch.querySelector(".arch-sheen");
   const MAX = 8;
-  const target = { rx: 0, ry: 0, mx: 70, my: 40 };
-  const cur = { ...target };
-  let raf = 0;
+  const spring = { stiffness: 120, damping: 20, mass: 0.8 };
 
-  const tick = () => {
-    cur.rx = lerp(cur.rx, target.rx, 0.08);
-    cur.ry = lerp(cur.ry, target.ry, 0.08);
-    cur.mx = lerp(cur.mx, target.mx, 0.08);
-    cur.my = lerp(cur.my, target.my, 0.08);
-    arch.style.transform = `rotateX(${cur.rx.toFixed(3)}deg) rotateY(${cur.ry.toFixed(3)}deg)`;
-    hero.style.setProperty("--mx", `${cur.mx.toFixed(2)}%`);
-    hero.style.setProperty("--my", `${cur.my.toFixed(2)}%`);
-    sheen.style.setProperty("--sx", `${(cur.ry * 2.2).toFixed(2)}%`);
-    sheen.style.setProperty("--sy", `${(-cur.rx * 1.6).toFixed(2)}%`);
-    const settled = Math.abs(cur.rx - target.rx) < 0.01 && Math.abs(cur.ry - target.ry) < 0.01 &&
-      Math.abs(cur.mx - target.mx) < 0.05 && Math.abs(cur.my - target.my) < 0.05;
-    raf = settled ? 0 : requestAnimationFrame(tick);
+  const rotateX = springValue(0, spring);
+  const rotateY = springValue(0, spring);
+  const mx = springValue(70, spring);
+  const my = springValue(40, spring);
+  styleEffect(arch, { rotateX, rotateY });
+
+  // The lamp and the glint on the glass follow the same springs through CSS variables.
+  const paint = () => {
+    hero.style.setProperty("--mx", `${mx.get().toFixed(2)}%`);
+    hero.style.setProperty("--my", `${my.get().toFixed(2)}%`);
+    sheen.style.setProperty("--sx", `${(rotateY.get() * 2.2).toFixed(2)}%`);
+    sheen.style.setProperty("--sy", `${(-rotateX.get() * 1.6).toFixed(2)}%`);
   };
-  const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
+  [rotateX, rotateY, mx, my].forEach((v) => v.on("change", paint));
 
   hero.addEventListener("pointermove", (e) => {
     if (reduceMotion.matches || !canHover.matches || e.pointerType !== "mouse") return;
     const r = hero.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width;
     const y = (e.clientY - r.top) / r.height;
-    target.ry = clamp((x - 0.5) * 2, -1, 1) * MAX;
-    target.rx = clamp((0.5 - y) * 2, -1, 1) * MAX;
-    target.mx = x * 100;
-    target.my = y * 100;
-    kick();
+    rotateY.set(clamp((x - 0.5) * 2, -1, 1) * MAX);
+    rotateX.set(clamp((0.5 - y) * 2, -1, 1) * MAX);
+    mx.set(x * 100);
+    my.set(y * 100);
   });
   hero.addEventListener("pointerleave", () => {
-    target.rx = 0; target.ry = 0; target.mx = 70; target.my = 40;
-    kick();
+    rotateX.set(0); rotateY.set(0); mx.set(70); my.set(40);
   });
 }
 
-/* ---------- Seal turns with the page, not on its own ---------- */
+/* ---------- Seal ring turns with the page, not on its own ---------- */
 function initSeal() {
-  const seal = document.querySelector(".seal-text");
-  let queued = false;
-  const update = () => {
-    queued = false;
-    const deg = reduceMotion.matches ? 0 : window.scrollY * 0.15;
-    seal.style.setProperty("--seal-rot", `${deg.toFixed(2)}deg`);
-  };
-  window.addEventListener("scroll", () => {
-    if (!queued) { queued = true; requestAnimationFrame(update); }
-  }, { passive: true });
+  const ring = document.querySelector(".seal-text");
+  const rot = springValue(0, { stiffness: 90, damping: 22 });
+  rot.on("change", (v) => ring.style.setProperty("--seal-rot", `${v.toFixed(2)}deg`));
+  const update = () => rot.set(reduceMotion.matches ? 0 : window.scrollY * 0.15);
+  window.addEventListener("scroll", update, { passive: true });
   update();
 }
 

@@ -1,5 +1,9 @@
 // Timeline + SGPI chart: both draw once when scrolled into view.
+import { animate, inView, stagger } from "motion";
 import { t, onLanguageChange } from "./i18n.js";
+
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const EASE_OUT = [0.2, 0.7, 0.2, 1];
 
 const SGPI = [6.40, 7.80, 7.80, 8.60, 7.60, 7.60];
 const ROMAN = ["I", "II", "III", "IV", "V", "VI"];
@@ -63,14 +67,6 @@ function buildChart() {
   });
 }
 
-function onceVisible(node, cb, threshold = 0.35) {
-  if (!("IntersectionObserver" in window)) { cb(); return; }
-  const io = new IntersectionObserver((entries) => {
-    if (entries.some((e) => e.isIntersecting)) { cb(); io.disconnect(); }
-  }, { threshold });
-  io.observe(node);
-}
-
 export function initReveal() {
   buildChart();
   onLanguageChange(buildChart);
@@ -87,6 +83,26 @@ export function initReveal() {
   const chart = document.getElementById("chart");
   const timeline = document.getElementById("timeline");
   chart.classList.add("will-draw");
-  onceVisible(timeline, () => timeline.classList.add("is-drawn"), 0.3);
-  onceVisible(chart, () => chart.classList.add("is-drawn"), 0.4);
+
+  // Timeline: the brass line draws down; nodes fill (CSS, staggered) as it reaches them.
+  const stopTimeline = inView(timeline, () => {
+    stopTimeline();
+    const line = timeline.querySelector(".timeline-line");
+    timeline.classList.add("is-drawn");
+    if (reduceMotion.matches) { line.style.transform = "none"; return; }
+    animate(line, { scaleY: [0, 1] }, { duration: 0.9, ease: EASE_OUT });
+  }, { amount: 0.3 });
+
+  // Chart: line draws itself, area fades up, then dots and labels pop in one after another.
+  const stopChart = inView(chart, () => {
+    stopChart();
+    if (reduceMotion.matches) { chart.classList.add("is-drawn"); return; }
+    const svg = chart.querySelector(".chart-svg");
+    const pts = svg.querySelectorAll(".chart-pt");
+    animate(svg.querySelector(".chart-line"), { strokeDasharray: [1, 1], strokeDashoffset: [1, 0] }, { duration: 1.2, ease: EASE_OUT });
+    animate(svg.querySelector(".chart-area"), { opacity: [0, 0.1] }, { delay: 0.6, duration: 0.6 });
+    animate(pts, { opacity: [0, 1], y: [8, 0] },
+      { delay: stagger(0.08, { startDelay: 1.1 }), type: "spring", visualDuration: 0.4, bounce: 0.3 })
+      .then(() => chart.classList.add("is-drawn"));
+  }, { amount: 0.4 });
 }
