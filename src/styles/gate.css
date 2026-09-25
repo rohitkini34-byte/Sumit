@@ -1,0 +1,86 @@
+.gate {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid; place-items: center;
+  padding: calc(env(safe-area-inset-top, 0px) + 24px) var(--pad) calc(env(safe-area-inset-bottom, 0px) + 24px);
+  color: var(--on-navy);
+  overflow-y: auto;
+}
+.gate-accepted .gate:not(.is-reopened) { display: none; }
+.no-js .gate { display: none; }
+
+.gate-door {
+  position: fixed; top: 0; bottom: 0; width: 50.5%;
+  background:
+    radial-gradient(120% 70% at 50% 40%, rgba(212, 162, 76, .08), transparent 60%),
+    var(--navy);
+  will-change: transform;
+}
+.gate-door--left { left: 0; }
+.gate-door--right { right: 0; }
+.gate-door::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(to bottom, transparent 2%, rgba(212, 162, 76, .5) 12%, rgba(212, 162, 76, .12) 30%, transparent 40%, transparent 60%, rgba(212, 162, 76, .12) 70%, rgba(212, 162, 76, .5) 88%, transparent 98%);
+}
+.gate-door--left::after { right: 0; }
+.gate-door--right::after { left: 0; }
+/* Faint panel mouldings, like a court-room door */
+.gate-door::before {
+  content: ""; position: absolute; inset: 6vh 4vw;
+  border: 1px solid rgba(212, 162, 76, .08);
+}
+
+.gate-content {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 640px;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 22px;
+  transition: opacity .25s ease;
+}
+.gate-scales { width: 76px; height: 76px; color: var(--brass-lit); }
+.gate-scales path, .gate-scales circle {
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: draw 1.4s var(--ease-out) forwards;
+}
+.gate-scales path:nth-child(n+5) { animation-delay: .25s; }
+.gate-scales path:nth-child(n+8) { animation-delay: .45s; }
+
+.gate-title { font-size: clamp(2.25rem, 5vw, 3.25rem); line-height: 1.1; }
+.gate-body {
+  color: var(--on-navy-muted); font-size: 1.0625rem; line-height: var(--lh-body);
+  max-width: 60ch; text-wrap: pretty;
+}
+.gate-lang { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.gate-lang-label { font-family: var(--font-display); font-style: italic; color: var(--on-navy-muted); font-size: 1rem; }
+html:lang(hi) .gate-lang-label, html:lang(mr) .gate-lang-label { font-style: normal; }
+.gate-lang-options { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+
+.pill-option {
+  min-height: 44px; min-width: 96px; padding: 0 18px; border-radius: 999px;
+  background: transparent; color: var(--on-navy); cursor: pointer;
+  border: 1px solid rgba(169, 180, 203, .35);
+  font-size: 1rem; font-weight: 500;
+  transition: background-color .2s var(--ease-out), border-color .2s var(--ease-out), color .2s var(--ease-out);
+}
+.pill-option[lang="hi"], .pill-option[lang="mr"] { font-family: "Mukta", system-ui, sans-serif; }
+.pill-option:hover { border-color: var(--brass-lit); }
+.pill-option[aria-pressed="true"] { border-color: var(--brass-lit); background: rgba(212, 162, 76, .14); color: #F3D9A6; }
+
+.gate-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px 28px; margin-top: 6px; }
+.gate-actions .btn { min-width: 180px; }
+
+/* Opening sequence */
+.gate.is-leaving .gate-content { opacity: 0; }
+.gate.is-opening .gate-door { transition: transform .9s var(--ease-door); }
+.gate.is-opening .gate-door--left { transform: translateX(-100%); }
+.gate.is-opening .gate-door--right { transform: translateX(100%); }
+
+/* Re-opened from footer: plain fade in */
+.gate.is-reopened { animation: fade-in .25s ease both; }
+.gate.is-reopened .gate-scales path, .gate.is-reopened .gate-scales circle { animation: none; stroke-dashoffset: 0; }
+
+html.gate-open body { overflow: hidden; }
+
+@media (max-height: 640px) {
+  .gate { place-items: start center; }
+  .gate-scales { width: 56px; height: 56px; }
+  .gate-content { gap: 16px; }
+}

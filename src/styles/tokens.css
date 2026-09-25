@@ -1,0 +1,78 @@
+/* Design tokens. Light theme is the default; dark theme is redefined twice
+   (system preference unless forced light, and forced dark). */
+:root {
+  --paper: #F3F5F8;
+  --surface: #FFFFFF;
+  --ink: #0F1A31;
+  --ink-2: #3B475C;
+  --muted: #5A6477;
+  --rule: #D5DBE5;
+  --navy: #0E1D3D;
+  --navy-2: #16295A;
+  --brass: #8F6419;
+  --brass-lit: #D4A24C;
+  --seal: #9E1C22;
+  --on-navy: #EEF1F7;
+  --on-navy-muted: #A9B4CB;
+  --focus: #D4A24C;
+
+  --font-display: "EB Garamond", Georgia, "Times New Roman", serif;
+  --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-black: "UnifrakturMaguntia", var(--font-display);
+  --lh-body: 1.65;
+
+  --s1: 8px; --s2: 16px; --s3: 24px; --s4: 32px; --s5: 48px; --s6: 64px; --s7: 96px;
+  --container: 1180px;
+  --pad: clamp(1.25rem, 4vw, 2.5rem);
+  --section-y: clamp(4rem, 10vw, 7.5rem);
+  --note-col: 180px;
+  --header-h: 72px;
+
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --ease-door: cubic-bezier(.77, 0, .18, 1);
+  --shadow-deep: 0 40px 80px -20px rgba(4, 10, 28, .55);
+  --shadow-card: 0 30px 60px -24px rgba(14, 29, 61, .45), 0 2px 6px rgba(14, 29, 61, .08);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0B1224;
+    --surface: #111B31;
+    --ink: #E7EBF2;
+    --ink-2: #C3CAD8;
+    --muted: #97A2B8;
+    --rule: #24314D;
+    --brass: #D4A24C;
+    --seal: #E0676C;
+    --shadow-card: 0 30px 60px -24px rgba(0, 0, 0, .7), 0 2px 6px rgba(0, 0, 0, .3);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --paper: #0B1224;
+  --surface: #111B31;
+  --ink: #E7EBF2;
+  --ink-2: #C3CAD8;
+  --muted: #97A2B8;
+  --rule: #24314D;
+  --brass: #D4A24C;
+  --seal: #E0676C;
+  --shadow-card: 0 30px 60px -24px rgba(0, 0, 0, .7), 0 2px 6px rgba(0, 0, 0, .3);
+  color-scheme: dark;
+}
+
+html:lang(hi) {
+  --font-display: "Tiro Devanagari Hindi", "EB Garamond", Georgia, serif;
+  --font-body: "Mukta", "Hanken Grotesk", system-ui, sans-serif;
+  --font-black: "Tiro Devanagari Hindi", Georgia, serif;
+  --lh-body: 1.8;
+}
+html:lang(mr) {
+  --font-display: "Tiro Devanagari Marathi", "EB Garamond", Georgia, serif;
+  --font-body: "Mukta", "Hanken Grotesk", system-ui, sans-serif;
+  --font-black: "Tiro Devanagari Marathi", Georgia, serif;
+  --lh-body: 1.8;
+}

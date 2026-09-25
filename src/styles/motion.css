@@ -1,0 +1,66 @@
+/* All animation lives here, plus the reduced-motion overrides. */
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes photo-in { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
+@keyframes seal-pop { 0% { opacity: 0; transform: translateZ(60px) scale(.8); } 70% { opacity: 1; transform: translateZ(60px) scale(1.04); } 100% { opacity: 1; transform: translateZ(60px) scale(1); } }
+@keyframes float { 0%, 100% { transform: translateY(-6px); } 50% { transform: translateY(6px); } }
+
+/* ---------- Hero intro (plays once, after the gate opens) ---------- */
+.hero[data-intro="pending"] .intro-fade,
+.hero[data-intro="pending"] .intro-late,
+.hero[data-intro="pending"] .hero-name .word,
+.hero[data-intro="pending"] .arch-photo,
+.hero[data-intro="pending"] .seal { opacity: 0; }
+.hero[data-intro="pending"] .arch-line path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+
+.hero[data-intro="play"] .arch-line path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .6s var(--ease-out) forwards; }
+.hero[data-intro="play"] .arch-photo { animation: photo-in .7s var(--ease-out) .2s both; }
+.hero[data-intro="play"] .intro-fade { animation: fade-in .5s var(--ease-out) .25s both; }
+.hero[data-intro="play"] .hero-name .word { animation: rise .6s var(--ease-out) calc(300ms + var(--i, 0) * 80ms) both; }
+.hero[data-intro="play"] .intro-late { animation: fade-in .4s var(--ease-out) .7s both; }
+.hero[data-intro="play"] .seal { animation: seal-pop .5s var(--ease-out) .9s both; }
+
+/* Touch devices: slow idle float instead of tilt */
+@media (hover: none) {
+  .arch-stage { animation: float 6s ease-in-out infinite; }
+}
+
+/* ---------- Language switch fade ---------- */
+#app, .gate-content { transition: opacity .22s ease; }
+.is-switching #app, .is-switching .gate-content { opacity: 0; transition-duration: .18s; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: .01ms !important;
+    transition-delay: 0s !important;
+  }
+  .gate-scales path, .gate-scales circle { stroke-dashoffset: 0; }
+  .hero[data-intro] .intro-fade,
+  .hero[data-intro] .intro-late,
+  .hero[data-intro] .hero-name .word,
+  .hero[data-intro] .arch-photo,
+  .hero[data-intro] .seal { opacity: 1; animation: none; }
+  .hero[data-intro] .seal { transform: translateZ(60px); }
+  .hero[data-intro] .arch-line path { stroke-dasharray: none; stroke-dashoffset: 0; animation: none; }
+  .arch-stage { animation: none; }
+  .timeline-line { transform: none; }
+  .tl-node { background: var(--brass) !important; }
+  .chart .chart-line { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+  .chart .chart-pt { opacity: 1 !important; }
+  .chart .chart-area { opacity: .1 !important; }
+  /* Sanad: crossfade instead of rotating */
+  .sanad-inner, .sanad[aria-pressed="true"] .sanad-inner { transform: none; }
+  .sanad-back { transform: none; opacity: 0; }
+  .sanad[aria-pressed="true"] .sanad-front { opacity: 0; }
+  .sanad[aria-pressed="true"] .sanad-back { opacity: 1; }
+  .sanad-face { transition: opacity .2s ease !important; }
+  /* Gate: plain fade, no door slide */
+  .gate.is-opening .gate-door--left, .gate.is-opening .gate-door--right { transform: none; }
+  .gate.is-opening { opacity: 0; transition: opacity .2s ease !important; }
+}
