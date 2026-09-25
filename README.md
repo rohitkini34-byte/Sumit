@@ -14,7 +14,7 @@ npm run build    # production build in dist/
 Import this repository at https://vercel.com/new (framework: Vite, build `npm run build`, output `dist`;
 `vercel.json` already sets these). Every push to the production branch redeploys.
 
-After the first deploy, put the live URL into `og:image` and the JSON-LD `url` in `index.html`.
+Live: https://sumit-xi.vercel.app/ (if the domain changes, update `canonical`, `og:url`, `og:image` and the JSON-LD `url` in `index.html`).
 
 ## Motion
 
