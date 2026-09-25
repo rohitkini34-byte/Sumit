@@ -9,12 +9,12 @@ npm run build    # production build in dist/
 ```
 
 
-## Deployment
+## Deployment (Vercel)
 
-Every push to `claude/website-uiux-pro-max-4j3nuj` or `main` builds and deploys to GitHub Pages
-(`.github/workflows/deploy.yml`): https://rohitkini34-byte.github.io/Sumit/
+Import this repository at https://vercel.com/new (framework: Vite, build `npm run build`, output `dist`;
+`vercel.json` already sets these). Every push to the production branch redeploys.
 
-One-time setup: in the repo, Settings → Pages → Build and deployment → Source: **GitHub Actions**.
+After the first deploy, put the live URL into `og:image` and the JSON-LD `url` in `index.html`.
 
 ## Motion
 
