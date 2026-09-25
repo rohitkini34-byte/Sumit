@@ -46,6 +46,7 @@ function apply(lang) {
   document.querySelectorAll("[data-lang]").forEach((btn) => {
     btn.setAttribute("aria-pressed", String(btn.dataset.lang === lang));
   });
+  document.querySelectorAll("[data-lang-select]").forEach((sel) => { sel.value = lang; });
   currentLang = lang;
   listeners.forEach((fn) => fn(lang));
 }
@@ -70,5 +71,8 @@ export function initI18n() {
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-lang]");
     if (btn) setLanguage(btn.dataset.lang);
+  });
+  document.addEventListener("change", (e) => {
+    if (e.target.matches("[data-lang-select]")) setLanguage(e.target.value);
   });
 }

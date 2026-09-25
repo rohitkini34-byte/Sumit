@@ -157,6 +157,28 @@ main:focus { outline: none; }
   transition: background-color .2s var(--ease-out), color .2s var(--ease-out);
 }
 .lang-seg button[lang="hi"], .lang-seg button[lang="mr"] { font-family: "Mukta", system-ui, sans-serif; font-size: .95rem; }
+.lang-seg--header button { padding: 0 14px; white-space: nowrap; }
+
+/* Compact language picker for narrower screens: shows the current language's full name */
+.lang-select {
+  position: relative; display: none; align-items: center;
+  height: 44px; border-radius: 999px; border: 1px solid rgba(169, 180, 203, .3);
+  color: var(--on-navy); cursor: pointer;
+  transition: border-color .2s var(--ease-out);
+}
+.lang-select:hover { border-color: var(--brass-lit); }
+.lang-select:focus-within { outline: 2px solid var(--focus); outline-offset: 3px; }
+.lang-select select {
+  appearance: none; -webkit-appearance: none;
+  height: 100%; margin: 0; border: 0; border-radius: 999px; background: transparent; color: inherit; cursor: pointer;
+  padding: 0 32px 0 38px;
+  font-family: "Mukta", "Hanken Grotesk", system-ui, sans-serif; font-size: 1rem; font-weight: 600; line-height: 1;
+}
+.lang-select select:focus-visible { outline: none; }
+.lang-select option { color: #0F1A31; background: #FFFFFF; }
+.lang-select-globe, .lang-select-chevron { position: absolute; pointer-events: none; color: var(--brass-lit); }
+.lang-select-globe { left: 13px; }
+.lang-select-chevron { right: 13px; }
 .lang-seg button:hover { color: var(--on-navy); }
 .lang-seg button[aria-pressed="true"] { background: var(--brass-lit); color: var(--navy); }
 
@@ -188,6 +210,10 @@ main:focus { outline: none; }
 }
 .menu-sheet a:hover { color: var(--brass-lit); }
 
+@media (max-width: 1099px) {
+  .lang-seg--header { display: none; }
+  .lang-select { display: inline-flex; }
+}
 @media (max-width: 1023px) {
   .site-nav a { padding: 0 8px; }
   .site-nav a::after { left: 8px; right: 8px; }
@@ -199,9 +225,12 @@ main:focus { outline: none; }
 }
 @media (max-width: 767px) {
   .brand-name { display: none; }
+  .header-inner { gap: 12px; }
   .header-tools { gap: 6px; }
-  .lang-seg button { min-width: 40px; padding: 0 6px; }
 }
-@media (max-width: 360px) {
+@media (max-width: 374px) {
+  .lang-select select { padding: 0 26px 0 32px; font-size: .95rem; }
+  .lang-select-globe { left: 10px; }
+  .lang-select-chevron { right: 9px; }
   .menu-btn { padding: 0 12px; }
 }

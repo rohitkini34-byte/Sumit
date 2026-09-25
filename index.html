@@ -150,11 +150,21 @@
         </nav>
 
         <div class="header-tools">
-          <div class="lang-seg" role="group" aria-label="Language">
-            <button type="button" data-lang="en" lang="en" aria-label="English">EN</button>
-            <button type="button" data-lang="hi" lang="hi" aria-label="हिंदी">हिं</button>
-            <button type="button" data-lang="mr" lang="mr" aria-label="मराठी">मरा</button>
+          <div class="lang-seg lang-seg--header" role="group" data-i18n-aria="footer.lang" aria-label="Language">
+            <button type="button" data-lang="en" lang="en">English</button>
+            <button type="button" data-lang="hi" lang="hi">हिंदी</button>
+            <button type="button" data-lang="mr" lang="mr">मराठी</button>
           </div>
+          <label class="lang-select">
+            <span class="visually-hidden" data-i18n="footer.lang">Language</span>
+            <svg class="lang-select-globe" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></g></svg>
+            <select data-lang-select>
+              <option value="en" lang="en">English</option>
+              <option value="hi" lang="hi">हिंदी</option>
+              <option value="mr" lang="mr">मराठी</option>
+            </select>
+            <svg class="lang-select-chevron" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+          </label>
           <button type="button" class="icon-btn theme-toggle" data-i18n-aria="nav.theme" aria-label="Switch theme">
             <svg class="i-sun" width="20" height="20" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg>
             <svg class="i-moon" width="20" height="20" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg>
