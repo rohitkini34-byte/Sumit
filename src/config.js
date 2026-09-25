@@ -1,20 +1,20 @@
-// All editable details live here. Replace every PLACEHOLDER before going live.
+// All editable details live here.
 
 export const CONTACT = {
-  email: "advocate@example.com",        // PLACEHOLDER
-  phoneDisplay: "+91 00000 00000",      // PLACEHOLDER
-  phoneTel: "+910000000000",            // PLACEHOLDER
-  whatsapp: "910000000000",             // PLACEHOLDER, digits only, used in https://wa.me/<number>
+  email: "adv.sumitpandey.legal@gmail.com",
+  phoneDisplay: "+91 77964 72986",
+  phoneTel: "+917796472986",
+  whatsapp: "917796472986",             // digits only, used in https://wa.me/<number>
 };
 
-// Temporary portrait. Drop a real photo at public/portrait.jpg and change this to "/portrait.jpg".
-export const PORTRAIT = "/portrait.svg"; // PLACEHOLDER
+// Portrait shown in the hero arch (file lives in public/). BASE_URL keeps it working on sub-path hosting.
+export const PORTRAIT = `${import.meta.env.BASE_URL}portrait.jpg`;
 
 // Face-follow frames (see build plan §7). Leave frames empty until images are ready.
 export const FACE = {
   cols: 5,          // number of horizontal gaze positions
   rows: 5,          // number of vertical gaze positions
-  frames: [],       // row-major list of image paths, top-left = looking up-left
+  frames: [],       // row-major list of image paths, top-left = looking up-left (prefix with import.meta.env.BASE_URL)
   // OR use a sprite sheet instead of separate files:
   sprite: null,     // e.g. "/face/sprite.webp"
 };

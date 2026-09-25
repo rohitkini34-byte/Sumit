@@ -8,12 +8,16 @@ npm run dev      # local dev server
 npm run build    # production build in dist/
 ```
 
-Deploy `dist/` to Vercel or Netlify (build command `npm run build`, output `dist`).
 
-## Before going live
+## Deployment
 
-- **Contact details:** edit `src/config.js` (`CONTACT`). All values there are placeholders.
-- **Portrait:** put a photo at `public/portrait.jpg` (WebP also fine) and set `PORTRAIT` in `src/config.js`. `public/portrait.svg` is a stand-in.
+Every push to `claude/website-uiux-pro-max-4j3nuj` or `main` builds and deploys to GitHub Pages
+(`.github/workflows/deploy.yml`): https://rohitkini34-byte.github.io/Sumit/
+
+## Editing
+
+- **Contact details:** `src/config.js` (`CONTACT`).
+- **Portrait:** `public/portrait.jpg` (3:4, background recoloured to navy to sit inside the arch).
 - **Face-follow:** drop frames in `public/face/` and list them in `FACE.frames` (row-major, `cols × rows`), or set `FACE.sprite`. It switches on automatically.
 - **Text:** all copy lives in `src/i18n/{en,hi,mr}.json`.
 
