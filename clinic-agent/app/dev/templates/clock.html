@@ -1,8 +1,0 @@
-{% extends "dev_base.html" %}
-{% block body %}
-<div class="card"><h2>Clinic clock</h2>
-<form method="post" action="/dev/clock"><input type="hidden" name="action" value="set"><input type="datetime-local" name="when" value="{{ value }}"> <button class="primary">Freeze at this IST time</button></form><br>
-<form method="post" action="/dev/clock"><input type="hidden" name="action" value="advance"><input type="number" name="minutes" value="60" style="width:90px"> minutes <button>Fast-forward</button></form><br>
-<form method="post" action="/dev/clock"><input type="hidden" name="action" value="reset"><button>Back to real time</button></form>
-<p class="muted">Jobs use this clock. After moving time, <form method="post" action="/dev/run-jobs" style="display:inline"><button>run jobs now</button></form>.</p></div>
-{% endblock %}

@@ -1,8 +1,0 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Now serving</title>
-<script src="/static/htmx.min.js"></script>
-<style>body{margin:0;background:#0b1320;color:#fff;font-family:system-ui,sans-serif;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center}
-.now{font-size:9vw;font-weight:800;letter-spacing:.05em}.lbl{font-size:3vw;opacity:.7}.next{font-size:4vw;margin-top:3vh;opacity:.85}.next span{margin:0 2vw}</style></head>
-<body><div id="d" hx-get="/queue/display/{{ key }}?session={{ session }}&partial=1" hx-trigger="every 10s" hx-swap="innerHTML">
-{% include "_display_inner.html" %}
-</div></body></html>
