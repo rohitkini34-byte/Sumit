@@ -1,0 +1,12 @@
+{% extends "dev_base.html" %}
+{% block body %}
+<div class="card"><h2>Fake calendar ({{ mode }})</h2>
+{% if mode != 'fake' %}<p>CALENDAR_MODE is google: edit the "Clinic TEST" calendar in Google Calendar instead.</p>{% else %}
+<form method="post" action="/dev/calendar/busy"><input type="date" name="day" value="{{ today }}"> <input type="time" name="start" value="11:00"> – <input type="time" name="end" value="11:30"> <input name="summary" value="Doctor busy"> <button class="primary">Add busy block</button></form>
+<table style="margin-top:12px"><tr><th>Start</th><th>End</th><th>Summary</th><th>Type</th><th></th></tr>
+{% for r in rows %}<tr><td>{{ r.start }}</td><td>{{ r.end }}</td><td>{{ r.summary }}</td><td>{{ 'appointment' if r.appt else 'busy block' }}</td>
+<td><form method="post" action="/dev/calendar/delete"><input type="hidden" name="event_id" value="{{ r.id }}"><button>Delete</button></form></td></tr>
+{% else %}<tr><td colspan="5" class="muted">No events.</td></tr>{% endfor %}</table>
+<p class="muted">Deleting an appointment's event simulates staff deleting it in Google Calendar; the reconciliation job (run jobs) then cancels the booking and notifies the patient.</p>
+{% endif %}</div>
+{% endblock %}

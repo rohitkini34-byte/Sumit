@@ -1,0 +1,56 @@
+[project]
+name = "clinic-agent"
+version = "0.1.0"
+description = "WhatsApp receptionist agent for a single physician's clinic"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi==0.141.1",
+    "uvicorn[standard]==0.54.0",
+    "pydantic-settings==2.15.0",
+    "sqlalchemy[asyncio]==2.1.1",
+    "asyncpg==0.31.0",
+    "aiosqlite==0.22.1",
+    "alembic==1.20.0",
+    "apscheduler==3.11.3",
+    "cryptography==50.0.1",
+    "jinja2==3.1.6",
+    "httpx==0.28.1",
+    "anthropic==1.8.0",
+    "google-api-python-client==2.200.0",
+    "google-auth==2.58.1",
+    "pyyaml==6.0.3",
+    "bcrypt==5.0.0",
+    "itsdangerous==2.2.0",
+    "python-multipart==0.0.32",
+    "tzdata==2026.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.1.1",
+    "pytest-asyncio==1.4.0",
+    "respx==0.23.1",
+    "pytest-cov==7.1.0",
+    "pip-audit==2.10.1",
+]
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.setuptools.package-data]
+app = ["clinic_config.yaml", "i18n/*.json", "admin/templates/*.html", "dev/templates/*.html", "static/*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+asyncio_default_test_loop_scope = "function"
+testpaths = ["tests"]
+markers = [
+    "staging: runs against real Meta / Google test accounts (needs staging credentials)",
+    "live_llm: calls the real Anthropic API (needs ANTHROPIC_API_KEY)",
+]
+addopts = "-m 'not staging and not live_llm'"

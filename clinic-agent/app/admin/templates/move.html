@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="card">
+  <h2>Move {{ appt.token }} · {{ appt.name }}</h2>
+  <p class="muted">Currently {{ appt.date }} {{ appt.time }}. The patient gets one "rescheduled" message with the new token and expected time.</p>
+  <form method="get"><input type="date" name="day" value="{{ day }}"> <button>Show free slots</button></form>
+  <div class="grid" style="margin-top:12px">
+  {% for s in slots %}
+    <form method="post" action="/admin/appointments/{{ appt.id }}/move"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="new_start" value="{{ s.iso }}"><button class="big" style="width:100%">{{ s.label }}</button></form>
+  {% else %}<p class="muted">No free slots on these days.</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

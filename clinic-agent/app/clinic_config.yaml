@@ -1,0 +1,58 @@
+# All scheduling rules are data. Edit this file, restart the app.
+clinic_name: "Dr. Example Clinic"
+doctor_name: "Dr. Example"
+address: "12 MG Road, Pune 411001"
+maps_link: "https://maps.google.com/?q=18.5204,73.8567"
+phone: "+910000000000"
+slot_minutes: 15
+buffer_minutes: 0
+min_lead_minutes: 60          # patients can't book a slot starting sooner than this
+booking_horizon_days: 14
+max_active_bookings_per_patient: 2
+hours:                        # 24h format, local time
+  mon: [["10:00","13:00"],["17:00","20:00"]]
+  tue: [["10:00","13:00"],["17:00","20:00"]]
+  wed: [["10:00","13:00"],["17:00","20:00"]]
+  thu: [["10:00","13:00"],["17:00","20:00"]]
+  fri: [["10:00","13:00"],["17:00","20:00"]]
+  sat: [["10:00","13:00"]]
+  sun: []
+holidays: ["2026-10-20", "2026-11-08"]
+reminders:
+  before_minutes: [1440, 120]
+consultation_fee_text: "₹500"
+
+queue:
+  sessions:                   # token numbering restarts for each session
+    morning: {prefix: "M", starts_before: "15:00"}
+    evening: {prefix: "E"}
+  walk_in_prefix: "W"
+  report_before_minutes: 10
+  grace_minutes: 10
+  late_reinsert_after: 2
+  max_late_minutes: 45
+  max_displacements_per_patient: 2
+  eta_rolling_window: 5
+  eta_round_minutes: 5
+  eta_range_minutes: 10
+  notify_when_patients_ahead: 3
+  notify_eta_shift_minutes: 20
+  noshow_warn_threshold: 2
+  overrun_allowance_minutes: 15   # reception gets "see at end / offer reschedule" beyond close + this
+  auto_close_after_minutes: 30    # sessions auto-close this long after scheduled end
+
+changes:
+  token_mode: "slot"
+  token_freeze_time: "20:00"
+  patient_cancel_cutoff_minutes: 0
+  late_cancel_minutes: 120
+  offer_earlier_slot:
+    enabled: true
+    min_lead_minutes: 90
+    offer_to_count: 3
+    hold_minutes: 15
+    max_cascade: 2
+  waitlist:
+    enabled: true
+    hold_minutes: 15
+    max_per_patient: 2

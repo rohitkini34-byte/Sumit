@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="grid">
+<div class="card"><h3>Doctor unavailable: cancel a session</h3>
+<form method="post" action="/admin/sessions/cancel" onsubmit="return confirm('Cancel every booking in this session and notify patients?')">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <input type="date" name="day" value="{{ day }}" required>
+  <select name="session">{% for s in sessions %}<option>{{ s }}</option>{% endfor %}{% if not sessions %}<option>morning</option><option>evening</option>{% endif %}</select>
+  <button class="danger">Cancel session</button></form>
+<p class="muted">Patients get "session cancelled by clinic" with Reschedule / Cancel buttons. No late-cancel counts, no slot offers.</p></div>
+<div class="card"><h3>Block time in a session</h3>
+<form method="post" action="/admin/sessions/block"><input type="hidden" name="csrf" value="{{ csrf }}">
+  <input type="date" name="day" value="{{ day }}" required> <input type="time" name="start" required> – <input type="time" name="end" required>
+  <button>Block</button></form>
+<p class="muted">Bookings inside the block are listed below for you to move or keep. Nothing is cancelled automatically.</p></div>
+</div>
+{% if affected is not none %}
+<div class="card"><h3>Affected bookings</h3>
+{% for a in affected %}
+<p><strong>{{ a.token }}</strong> {{ a.name }} {{ a.time }} →
+ {% for s in a.suggestions %}<form method="post" action="/admin/appointments/{{ a.id }}/move" class="inline"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="new_start" value="{{ s.iso }}"><button>{{ s.label }}</button></form>{% endfor %}
+ <form method="post" action="/admin/appointments/{{ a.id }}/clear-flag" class="inline"><input type="hidden" name="csrf" value="{{ csrf }}"><button>Keep</button></form></p>
+{% else %}<p class="muted">No bookings affected.</p>{% endfor %}
+</div>
+{% endif %}
+{% endblock %}

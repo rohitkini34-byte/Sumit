@@ -1,0 +1,12 @@
+{% extends "dev_base.html" %}
+{% block body %}
+<div class="card"><h2>Stage 1: fully offline</h2>
+<p>WA_MODE=<b>{{ settings.WA_MODE }}</b> · CALENDAR_MODE=<b>{{ settings.CALENDAR_MODE }}</b> · LLM_MODE=<b>{{ settings.LLM_MODE }}</b> · DB=<b>{{ 'SQLite' if settings.is_sqlite else 'Postgres' }}</b></p>
+<ul>
+<li><a href="/dev/chat">WhatsApp simulator</a>: chat as a fake patient. Messages are signed and posted to the real webhook.</li>
+<li><a href="/dev/clock">Clock</a>: freeze / fast-forward clinic time, then <form method="post" action="/dev/run-jobs" style="display:inline"><button>Run jobs now</button></form> (reminders, follow-ups, offers, queue notices, reconciliation).</li>
+<li><a href="/dev/calendar">Fake calendar</a>: add "doctor busy" blocks; see events created by bookings.</li>
+<li><a href="/dev/queue-sim">Queue simulator</a>: replay arrivals, lateness and no-shows against the real queue rules.</li>
+<li><a href="/admin">Admin</a> (dev login admin / admin) and the <a href="/admin/queue">reception queue board</a>.</li>
+</ul></div>
+{% endblock %}

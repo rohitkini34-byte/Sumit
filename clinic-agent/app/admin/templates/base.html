@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ clinic.clinic_name }} · Admin{% endblock %}</title>
+<script src="/static/htmx.min.js"></script>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1d2433;--muted:#6b7385;--line:#e3e6ec;--accent:#0f766e;--warn:#b45309;--bad:#b91c1c;--ok:#15803d}
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--ink);color:#fff;padding:10px 16px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+header a{color:#cfe;text-decoration:none;font-weight:500}header .sp{flex:1}
+header .env{background:#b45309;color:#fff;border-radius:4px;padding:1px 6px;font-size:12px}
+main{padding:16px;max-width:1200px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+table{width:100%;border-collapse:collapse}th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:12px;text-transform:uppercase;color:var(--muted);letter-spacing:.04em}
+button,.btn{font:inherit;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--ink);text-decoration:none;display:inline-block}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}button.danger{color:var(--bad);border-color:#f3c4c4}
+button.big{padding:12px 18px;font-size:17px}
+input,select,textarea{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px}
+form.inline{display:inline}
+.muted{color:var(--muted)}.pill{display:inline-block;border-radius:999px;padding:1px 8px;font-size:12px;background:#eef}
+.st-cancelled,.st-rescheduled{opacity:.5}.st-cancelled td{text-decoration:line-through}
+.flag{background:#fde68a;color:#78350f}.late{background:#fee2e2;color:#991b1b}.hint{background:#dcfce7;color:#166534}
+.row-actions{display:flex;gap:6px;flex-wrap:wrap}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+</style>
+</head>
+<body>
+{% if user %}
+<header>
+  <strong>{{ clinic.clinic_name }}</strong>
+  <a href="/admin">Appointments</a><a href="/admin/queue">Queue</a><a href="/admin/book">Book</a>
+  <a href="/admin/followups">Follow-ups</a><a href="/admin/handoff">Handoff inbox</a><a href="/admin/sessions">Sessions</a><a href="/admin/audit">Audit</a>
+  {% if env == 'dev' %}<a href="/dev">Dev tools</a><span class="env">DEV</span>{% endif %}
+  <span class="sp"></span>
+  <form method="post" action="/admin/logout" class="inline"><input type="hidden" name="csrf" value="{{ csrf }}"><button>Log out {{ user }}</button></form>
+</header>
+{% endif %}
+<main>{% block body %}{% endblock %}</main>
+</body>
+</html>

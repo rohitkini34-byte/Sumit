@@ -39,3 +39,8 @@ the seal's scroll rotation, and the timeline/chart draws (`inView`). Everything 
 - `src/sanad-card.js` — enrolment flip card
 - `src/i18n.js`, `src/theme.js` — language and light/dark switching
 - `src/styles/` — tokens, base, gate, hero, sections, motion (incl. reduced-motion overrides)
+
+## Clinic WhatsApp receptionist agent
+
+The `clinic-agent/` folder holds a separate project: a WhatsApp receptionist for a doctor's
+clinic (Python/FastAPI). See [`clinic-agent/README.md`](clinic-agent/README.md).

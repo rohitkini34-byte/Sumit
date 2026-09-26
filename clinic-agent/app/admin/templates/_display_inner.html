@@ -1,0 +1,4 @@
+<div class="lbl">Now serving · अभी · आता</div>
+<div class="now">{{ now_serving or '—' }}</div>
+<div class="lbl">Next</div>
+<div class="next">{% for t in next_tokens %}<span>{{ t }}</span>{% else %}—{% endfor %}</div>

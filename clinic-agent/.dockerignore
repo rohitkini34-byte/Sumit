@@ -1,0 +1,10 @@
+.venv
+**/__pycache__
+*.db
+.env
+.env.*
+!.env*.example
+secrets
+tests
+.pytest_cache
+.coverage
